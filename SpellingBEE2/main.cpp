@@ -2,16 +2,36 @@
 #include<GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>  // GLUT, includes glu.h and gl.h
+#include<stdlib.h>
+#include<stdio.h>
 #include<string.h>
 
 
 void display();
 void gameDisplay();
+void welcomeDisplay();
 void reshape(int, int);
+void keys();
 
 void init() {
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 }
+
+void keys(unsigned char key, int x, int y)
+{
+	if (key == 'x')
+	{
+		glutDisplayFunc(gameDisplay);
+
+	}
+	glutPostRedisplay();
+}
+
+   void myTimer(int val)
+   {
+	   glutDisplayFunc(gameDisplay);
+	   glutPostRedisplay();
+   }
 
 int main(int argc, char** argv)
 {
@@ -24,13 +44,17 @@ int main(int argc, char** argv)
 
 	
 	glutCreateWindow("SpellingBEE Game");
-
-	glutDisplayFunc(gameDisplay);
+	
+	glutDisplayFunc(welcomeDisplay);
 	// glutReshapeFunc(reshape);
+	
+	glutKeyboardFunc(keys);
+	glutTimerFunc(2000, myTimer, 0);
+	
 	init();
 
 	glutMainLoop();
-
+	return 0;
 
 }
 
@@ -61,7 +85,7 @@ void gameDisplay()
 	glRasterPos3f(-0.5, 0.6, 0);
 
 	char question[] = "Choose the correct spelling ";
-	for (int i = 0; i < strlen(question); i++) {
+	for (int i = 0; i< strlen(question); i++) {
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, question[i]);
 		glutSwapBuffers();
 	}
@@ -101,7 +125,7 @@ void gameDisplay()
 	//choice A
 	glRasterPos3d(-0.45, 0.20, 0);
 
-	for (int i = 0; i < strlen(choice1); i++) {
+	for (int i = 0; i<strlen(choice1); i++) {
 		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, choice1[i]);
 		glutSwapBuffers();
 	}
@@ -141,10 +165,33 @@ void gameDisplay()
 		glutSwapBuffers();
 	}
 	
-	
+      
 
 	
 }
+void welcomeDisplay() {
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glColor3f(1, 0, 0);
+
+	glRasterPos3f(-0.8, 1.5, 0);
+	char msg1[] = "Welcome to spellingBEE";
+	for (int i = 0; i < strlen(msg1); i++)
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, msg1[i]);
+
+	glColor3f(0, 0, 1);
+	glRasterPos3f(-0.8, -1.5, 0);
+	char msg2[] = "Press X to Start the game";
+	for (int i = 0; i < strlen(msg2); i++)
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, msg2[i]);
+
+
+
+	glutSwapBuffers();
+
+}
+
+
 
 void reshape(int w, int h) 
 {
